@@ -43,9 +43,11 @@ GROUP BY s.email
 HAVING COUNT(s.email) > 1;
 
 -- Напишите запрос, с помощью которого можно определить возраст каждого сотрудника из таблицы Staff на момент запроса.
--- Функции Oracle DB. MONTHS_BETWEEN возвращает количество месяцев между датами не целым числом, TRUNC в данном случае уберёт значения после запятой, без округления.
+-- Функции Oracle DB. MONTHS_BETWEEN возвращает количество месяцев между датами числом с плавающей точкой, TRUNC в данном случае уберёт значения после запятой, без округления. 
+-- TO_DATE -можно не использовать, т.к. birthday заведомо после типа DATE, но лучше
 SELECT name, TRUNC(MONTHS_BETWEEN(SYSDATE, TO_DATE(birthday)) / 12)
 FROM STAFF; 
+-- можно исполльзовать в MySql DATEDIFF(), в Postgres AGE()
 
 --Напишите запрос, с помощью которого можно определить должность (Jobtitles.name) со вторым по величине уровнем зарплаты
 --1
@@ -54,4 +56,4 @@ ORDER BY salary DESC
 LIMIT 1 OFFSET 1;
 
 --2
-SELECT name FROM Jobtitles j WHERE j.jobtitle_id IN (SELECT s.jobtitle_id FROM Staff s ORDER BY salary DESC LIMIT 1 OFFSET 1);
+SELECT name FROM Jobtitles j WHERE j.jobtitle_id = (SELECT s.jobtitle_id FROM Staff s ORDER BY salary DESC LIMIT 1 OFFSET 1);
